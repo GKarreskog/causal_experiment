@@ -1,0 +1,97 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+
+{% block app_styles %}
+
+{% endblock%}
+
+{% block title %}
+    Make an investment choice
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+    {% formfield player.investment %}
+
+    {% next_button %}
+
+    <strong> Treatment: </strong> {{ player.treatment }}
+    {% if player.round_number > 1%}
+ <p><strong>Round:</strong> {{player.round_number }}   <strong>Total payoff:</strong> {{tot_payoff}} </p>
+ <p>You invested  which resulted in capital stock {{ prev_player.capital }} and wage {{ prev_player.wage}} giving a total payoff {{ prev_player.payoff}} </p>
+   
+ {% if player.treatment == 1 %}
+ <table class="table">
+       <tr> 
+           <th>Round</th>
+           <th>Investment</th> 
+           <th>Reach</th>
+           <th>Skill</th>
+           <th>Increased sales</th>
+           <th>Profit</th>
+       </tr>
+       {% for p in prev_players%}
+       <tr> 
+           <td>{{p.round_number}}</td>
+           <td>{{ p.investment }}</td>
+           <td>{{ p.capital }}</td>
+           <td>{{ p.skill }}</td>
+           <td>{{ p.wage}}</td>
+           <td>{{ p.payoff}}</td>
+       </tr>
+       {% endfor %}
+   </table> 
+{% endif %}
+{% if player.treatment == 2 %}
+ <table class="table">
+       <tr> 
+           <th>Round</th>
+           <th>Investment</th> 
+           <th>Reach</th>
+           <th>Increased sales</th>
+           <th>Profit</th>
+       </tr>
+       {% for p in prev_players%}
+       <tr> 
+           <td>{{p.round_number}}</td>
+           <td>{{ p.investment }}</td>
+           <td>{{ p.capital }}</td>
+           <td>{{ p.wage}}</td>
+           <td>{{ p.payoff}}</td>
+       </tr>
+       {% endfor %}
+   </table> 
+{% endif %}
+{% if player.treatment == 3 %}
+ <table class="table">
+       <tr> 
+           <th>Round</th>
+           <th>Investment</th> 
+           <th>Increased sales</th>
+           <th>Profit</th>
+       </tr>
+       {% for p in prev_players%}
+       <tr> 
+           <td>{{p.round_number}}</td>
+           <td>{{ p.investment }}</td>
+           <td>{{ p.wage}}</td>
+           <td>{{ p.payoff}}</td>
+       </tr>
+       {% endfor %}
+   </table> 
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(function() {
+        $("#id_investment").focus();
+    });
+</script>
+{% endblock %}

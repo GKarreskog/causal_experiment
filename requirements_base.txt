@@ -1,0 +1,3 @@
+otree[mturk]>=2.1.13
+numpy >= 1.16
+scipy >= 1.2
