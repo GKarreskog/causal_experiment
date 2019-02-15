@@ -17,6 +17,8 @@ class Constants(BaseConstants):
     name_in_url = 'causal_reasoning_experiment'
     players_per_group = None
     num_rounds = 50
+    num_hire = 20
+    dollars_per_point = 0.002
 
 
 class Subsession(BaseSubsession):
@@ -43,14 +45,23 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     investment = models.CurrencyField(
         min=0, max=100,
-        label="Much do you want to invest?"
+        label="How large marketing budget do you want to assign to this product?"
     )
-    capital = models.FloatField()
-    skill = models.FloatField()
-    wage = models.IntegerField()
+    reach = models.FloatField(initial=0)
+    skill = models.FloatField(initial=0)
+    wage = models.IntegerField(initial=0)
     treatment = models.IntegerField()
-    investment_order = models.IntegerField()
-    policy_order = models.IntegerField()
+    β = models.FloatField(initial=0.5)
+
+    hire_cost = models.IntegerField()
+    hire_reach = models.IntegerField()
+    hire_decision = models.BooleanField(label="Do you want to buy this add?")
+
+    skill_σ = models.IntegerField(initial=20)
+    reach_σ = models.IntegerField(initial=10)
+    wage_σ = models.IntegerField(initial=10)
+    # investment_order = models.IntegerField()
+    # policy_order = models.IntegerField()
 
     # policy_a = model.IntegerField()
     # policy_y = model.IntegerField()
@@ -64,12 +75,20 @@ class Player(BasePlayer):
     # def policy_calc_result(self):
     #     self.policy_β = 0.6
     #     self.policy_y = 1 if np.random.rand() < self.policy_a*self.policy_β else 0
+    def hire_calc_result(self):
+        if self.hire_decision:
+            self.skill = round(np.random.randn()*self.skill_σ,2)
+            self.reach = round(np.random.rand()*self.reach_σ + self.hire_reach + self.skill)
+            self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)  
+            self.payoff = self.wage -  self.hire_cost
+        else: 
+            self.payoff = 0  
 
     def calc_result(self):
-        a = np.sqrt(float(self.investment)/100)*100
-        self.skill = round(max(0.1, np.random.randn()*0.1 + 1), 2)
-        self.capital = round(max(0, np.random.randn()*10 + a*self.skill))
-        self.wage = round(max(0, np.random.randn()*1 + self.skill*self.capital))
+        a = np.sqrt(float(self.investment))*10/self.β
+        self.skill = round(np.random.randn()*self.skill_σ, 2)
+        self.reach = round(np.random.randn()*self.reach_σ + a + self.skill)
+        self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
         self.payoff = self.wage -  self.investment 
         # p_θ1 = 0.5
         # θ_0 = 0.5
@@ -77,8 +96,8 @@ class Player(BasePlayer):
         # β_0 = 0.3
         # β_1 = 0.8
         # self.skill = θ_1 if np.random.rand() < p_θ1 else θ_0
-        # self.capital = β_1 if np.random.rand() < self.skill*a else β_0
-        # self.wage = 120 if np.random.rand() < self.skill*self.capital else 20
+        # self.reach = β_1 if np.random.rand() < self.skill*a else β_0
+        # self.wage = 120 if np.random.rand() < self.skill*self.reach else 20
         # self.payoff = self.wage -  self.investment 
 
 

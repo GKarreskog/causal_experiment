@@ -1,0 +1,59 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+
+{% block app_styles %}
+
+{% endblock%}
+
+{% block title %}
+    Make an investment choice
+{% endblock %}
+
+
+
+
+
+{% block content %}
+<p>The proposed advertisement has a cost of {{player.hire_cost }} and an expected reach of {{player.hire_reach}}.</p>
+    {% formfield player.hire_decision %}
+
+    {% next_button %}
+
+    <strong> Treatment: </strong> {{ player.treatment }}
+    <p><strong>Round:</strong> {{player.round_number }}   <strong>Total payoff:</strong> {{tot_payoff}} </p>
+{% if player.round_number > first_round %}
+<table class="table">
+    <tr> 
+        <th>Round</th>
+        <th>Hire Decision</th> 
+        <th>Hire Cost</th> 
+        <th>Reach</th>
+        <th>Increased sales</th>
+        <th>Profit</th>
+    </tr>
+    {% for p in prev_players%}
+    <tr> 
+        <td>{{p.round_number}}</td>
+        <td>{{ p.hire_decision }}</td>
+        <td>{{ p.hire_cost }}</td>
+        <td>{{ p.reach }} </td>
+        <td>{{ p.wage}} </td>
+        <td>{{ p.payoff}}</td>
+    </tr>
+    {% endfor %}
+</table> 
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(function() {
+        $("#id_investment").focus();
+        $("#id_investment").select();
+        $('#id_investment').mouseup(function (e) {
+    e.preventDefault();
+});
+    });
+</script>
+{% endblock %}

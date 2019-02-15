@@ -23,7 +23,6 @@
     <strong> Treatment: </strong> {{ player.treatment }}
     {% if player.round_number > 1%}
  <p><strong>Round:</strong> {{player.round_number }}   <strong>Total payoff:</strong> {{tot_payoff}} </p>
- <p>You invested  which resulted in capital stock {{ prev_player.capital }} and wage {{ prev_player.wage}} giving a total payoff {{ prev_player.payoff}} </p>
    
  {% if player.treatment == 1 %}
  <table class="table">
@@ -39,7 +38,7 @@
        <tr> 
            <td>{{p.round_number}}</td>
            <td>{{ p.investment }}</td>
-           <td>{{ p.capital }}</td>
+           <td>{{ p.reach }}</td>
            <td>{{ p.skill }}</td>
            <td>{{ p.wage}}</td>
            <td>{{ p.payoff}}</td>
@@ -60,7 +59,7 @@
        <tr> 
            <td>{{p.round_number}}</td>
            <td>{{ p.investment }}</td>
-           <td>{{ p.capital }}</td>
+           <td>{{ p.reach }}</td>
            <td>{{ p.wage}}</td>
            <td>{{ p.payoff}}</td>
        </tr>
@@ -92,6 +91,10 @@
 <script type="text/javascript">
     $(function() {
         $("#id_investment").focus();
+        $("#id_investment").select();
+        $('#myInput').mouseup(function (e) {
+    e.preventDefault();
+});
     });
 </script>
 {% endblock %}
