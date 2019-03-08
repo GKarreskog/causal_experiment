@@ -15,7 +15,8 @@
 
 
 {% block content %}
-<p>The proposed advertisement has a cost of {{player.hire_cost }} and an expected reach of {{player.hire_reach}}.</p>
+<p>In this second part of the experiment you are still making decisions for the same hypothetical company that sells a product. But instead of deciding yourself on how much to advertise, an external consultant comes to you to offer you proposals for ad-campaigns. Your job is to make a decision whether you want to buy the proposed advertisments. If you decide not to buy the advertisement your payoff is 0, but if you buy the advertisement your are paid for each additional product that is sold minus the cost of advertising.</p>
+<p>The proposed advertisement costs {{player.hire_cost }} and is expected to reach {{player.hire_reach}} costumers.</p>
     {% formfield player.hire_decision %}
 
     {% next_button %}

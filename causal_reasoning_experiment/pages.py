@@ -22,8 +22,11 @@ class Investment(Page):
             return {
             "prev_player":self.player.in_round(self.round_number - 1), 
             "prev_players":prev_players,
-            "tot_payoff":cumulative_payoff
+            "tot_payoff":cumulative_payoff,
+            "num_first_exp":Constants.num_rounds - Constants.num_hire
             }
+        else:
+            return {"num_first_exp":Constants.num_rounds - Constants.num_hire}
 
 class Hiring(Page):
     form_model = 'player'

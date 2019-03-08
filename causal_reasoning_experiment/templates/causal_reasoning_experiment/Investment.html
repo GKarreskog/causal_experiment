@@ -15,74 +15,97 @@
 
 
 {% block content %}
+<p>In this experiment, you take on the role of a marketing manager of a hypothetical company that sells a product. You must decide how much to spend on advertising for the next month. On average, the more you spend on advertising, the more your product will sell. However, the positive effect of advertising on sales decreases the more you spend (because it becomes harder to reach additional customers (maybe we should include this to make it more reasonable)). Additionally, there may be random fluctuations: for example, sometimes advertisements are more or less effective or sometimes people like your product more or less. The outcome of each investment is independent from your previous decisions. </p>
+<p>You are paid for each additional product that is sold minus the cost of advertising. Your job is to find the amount of advertising that maximizes your payoff on average. You will have to learn from experience to figure how much you should spend on advertising..</p>
+<p>After each decision you will see both your decision and the outcome of that decision for the 10 previous rounds. This first part of the experiment consists of {{num_first_exp}} decisions. The amount spent on advertising must be between 0 and 100 points. Once the experiment is over you will be paid {{Constants.dollars_per_point}} $ per point. </p>
 
-    {% formfield player.investment %}
+
+
+{% formfield player.investment %}
 
     {% next_button %}
 
-    <strong> Treatment: </strong> {{ player.treatment }}
+    <!-- <strong> Treatment: </strong> {{ player.treatment }} -->
     {% if player.round_number > 1%}
+
+<p><strong>Description of the data</strong></p>
+    <dl>
+        <dt>Investment</dt>
+        <dd>The amount you invested in marketing. The amount you invest is decuted from your total points </dd>
+        <dt>Increased sales</dt>
+        <dd>How much extra was earned from selling the product after the marketing. This amount is added to your total points.</dd>
+        {% if player.treatment < 3  %}
+        <dt>Reach</dt>
+        <dd>The number of potential customers that were reached by the marketing effort.</dd>
+        {% if player.treatment == 1 %}
+        <dt>Quality</dt>
+        <dd>The quality of the product that was marketed.</dd>
+        {% endif %}
+        {% endif %}
+        </dl>
  <p><strong>Round:</strong> {{player.round_number }}   <strong>Total payoff:</strong> {{tot_payoff}} </p>
-   
+
+
  {% if player.treatment == 1 %}
+
  <table class="table">
-       <tr> 
+       <tr>
            <th>Round</th>
-           <th>Investment</th> 
+           <th>Investment</th>
            <th>Reach</th>
-           <th>Skill</th>
+           <th>Quality</th>
            <th>Increased sales</th>
-           <th>Profit</th>
+           <!-- <th>Profit</th> -->
        </tr>
        {% for p in prev_players%}
-       <tr> 
+       <tr>
            <td>{{p.round_number}}</td>
            <td>{{ p.investment }}</td>
            <td>{{ p.reach }}</td>
            <td>{{ p.skill }}</td>
            <td>{{ p.wage}}</td>
-           <td>{{ p.payoff}}</td>
+           <!-- <td>{{ p.payoff}}</td> -->
        </tr>
        {% endfor %}
-   </table> 
+   </table>
 {% endif %}
 {% if player.treatment == 2 %}
  <table class="table">
-       <tr> 
+       <tr>
            <th>Round</th>
-           <th>Investment</th> 
+           <th>Investment</th>
            <th>Reach</th>
            <th>Increased sales</th>
-           <th>Profit</th>
+           <!-- <th>Profit</th> -->
        </tr>
        {% for p in prev_players%}
-       <tr> 
+       <tr>
            <td>{{p.round_number}}</td>
            <td>{{ p.investment }}</td>
            <td>{{ p.reach }}</td>
            <td>{{ p.wage}}</td>
-           <td>{{ p.payoff}}</td>
+           <!-- <td>{{ p.payoff}}</td> -->
        </tr>
        {% endfor %}
-   </table> 
+   </table>
 {% endif %}
 {% if player.treatment == 3 %}
  <table class="table">
-       <tr> 
+       <tr>
            <th>Round</th>
-           <th>Investment</th> 
+           <th>Investment</th>
            <th>Increased sales</th>
-           <th>Profit</th>
+           <!-- <th>Profit</th> -->
        </tr>
        {% for p in prev_players%}
-       <tr> 
+       <tr>
            <td>{{p.round_number}}</td>
            <td>{{ p.investment }}</td>
            <td>{{ p.wage}}</td>
-           <td>{{ p.payoff}}</td>
+           <!-- <td>{{ p.payoff}}</td> -->
        </tr>
        {% endfor %}
-   </table> 
+   </table>
 {% endif %}
 {% endif %}
 {% endblock %}
