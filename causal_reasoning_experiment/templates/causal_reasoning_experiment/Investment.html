@@ -15,9 +15,17 @@
 
 
 {% block content %}
-<p>In this experiment, you take on the role of a marketing manager of a hypothetical company that sells a product. You must decide how much to spend on advertising for the next month. On average, the more you spend on advertising, the more your product will sell. However, the positive effect of advertising on sales decreases the more you spend (because it becomes harder to reach additional customers (maybe we should include this to make it more reasonable)). Additionally, there may be random fluctuations: for example, sometimes advertisements are more or less effective or sometimes people like your product more or less. The outcome of each investment is independent from your previous decisions. </p>
+<!-- <p>In this experiment, you take on the role of a marketing manager of a hypothetical company that sells a product. You must decide how much to spend on advertising for the next month. On average, the more you spend on advertising, the more your product will sell. However, the positive effect of advertising on sales decreases the more you spend (because it becomes harder to reach additional customers (maybe we should include this to make it more reasonable)). Additionally, there may be random fluctuations: for example, sometimes advertisements are more or less effective or sometimes people like your product more or less. The outcome of each investment is independent from your previous decisions. </p>
 <p>You are paid for each additional product that is sold minus the cost of advertising. Your job is to find the amount of advertising that maximizes your payoff on average. You will have to learn from experience to figure how much you should spend on advertising..</p>
-<p>After each decision you will see both your decision and the outcome of that decision for the 10 previous rounds. This first part of the experiment consists of {{num_first_exp}} decisions. The amount spent on advertising must be between 0 and 100 points. Once the experiment is over you will be paid {{Constants.dollars_per_point}} $ per point. </p>
+<p>After each decision you will see both your decision and the outcome of that decision for the 10 previous rounds. You will make {{ Constants.num_rounds}} decisions. The amount spent on advertising must be between 0 and 100 points. Once the experiment is over you will be paid {{Constants.dollars_per_point}} $ per point. </p> -->
+
+<p>In this experiment, you take on the role of a CEO of a hypothetical company that wants to develop a product. If you manage to get a new product, you will receive {{ Constants.reward}} points.
+
+    <p>You have to decide how much you want to invest in reasearch and development for this potential new product. However, the positive effect of aditional investments in reasearch and development decreases the more you invest, i.e. the difference between investing 10 and 20 points is greater then the difference between investing 80 and 90 points.  </p>
+
+    <p>You will make {{ Constants.num_rounds}} decisions in total, and you can use the outcome of the previous decisions to help you figure out what the optimal level of investment is. The proces is not deterministic, the same level of investment will often lead to different outcomes. And the outcome of each decision does not depend on how much you invested in previous periods.
+
+<p>  Once the experiment is over you will be paid {{Constants.dollars_per_point}} $ per point. </p>
 
 
 
@@ -27,22 +35,6 @@
 
     <!-- <strong> Treatment: </strong> {{ player.treatment }} -->
     {% if player.round_number > 1%}
-
-<p><strong>Description of the data</strong></p>
-    <dl>
-        <dt>Investment</dt>
-        <dd>The amount you invested in marketing. The amount you invest is decuted from your total points </dd>
-        <dt>Increased sales</dt>
-        <dd>How much extra was earned from selling the product after the marketing. This amount is added to your total points.</dd>
-        {% if player.treatment < 3  %}
-        <dt>Reach</dt>
-        <dd>The number of potential customers that were reached by the marketing effort.</dd>
-        {% if player.treatment == 1 %}
-        <dt>Quality</dt>
-        <dd>The quality of the product that was marketed.</dd>
-        {% endif %}
-        {% endif %}
-        </dl>
  <p><strong>Round:</strong> {{player.round_number }}   <strong>Total payoff:</strong> {{tot_payoff}} </p>
 
 
@@ -52,18 +44,18 @@
        <tr>
            <th>Round</th>
            <th>Investment</th>
-           <th>Reach</th>
-           <th>Quality</th>
-           <th>Increased sales</th>
+           <th>New patent</th>
+           <th>Quality of research team</th>
+           <th>Succesful prodcut</th>
            <!-- <th>Profit</th> -->
        </tr>
        {% for p in prev_players%}
        <tr>
            <td>{{p.round_number}}</td>
            <td>{{ p.investment }}</td>
-           <td>{{ p.reach }}</td>
+           <td>{{ p.patent }}</td>
            <td>{{ p.skill }}</td>
-           <td>{{ p.wage}}</td>
+           <td>{{ p.success}}</td>
            <!-- <td>{{ p.payoff}}</td> -->
        </tr>
        {% endfor %}
@@ -74,16 +66,16 @@
        <tr>
            <th>Round</th>
            <th>Investment</th>
-           <th>Reach</th>
-           <th>Increased sales</th>
+          <th>New patent</th>
+           <th>Succesful prodcut</th>
            <!-- <th>Profit</th> -->
        </tr>
        {% for p in prev_players%}
        <tr>
            <td>{{p.round_number}}</td>
            <td>{{ p.investment }}</td>
-           <td>{{ p.reach }}</td>
-           <td>{{ p.wage}}</td>
+           <td>{{ p.patent }}</td>
+           <td>{{ p.success}}</td>
            <!-- <td>{{ p.payoff}}</td> -->
        </tr>
        {% endfor %}
@@ -94,20 +86,36 @@
        <tr>
            <th>Round</th>
            <th>Investment</th>
-           <th>Increased sales</th>
+           <th>Succesful prodcut</th>
            <!-- <th>Profit</th> -->
        </tr>
        {% for p in prev_players%}
        <tr>
            <td>{{p.round_number}}</td>
            <td>{{ p.investment }}</td>
-           <td>{{ p.wage}}</td>
+           <td>{{ p.success}}</td>
            <!-- <td>{{ p.payoff}}</td> -->
        </tr>
        {% endfor %}
    </table>
 {% endif %}
 {% endif %}
+
+<p><strong>Description of the data</strong></p>
+    <dl>
+        <dt>Investment</dt>
+        <dd>The amount you invested in marketing. The amount you invest is decuted from your total points </dd>
+        <dt>Succesful prodcut</dt>
+        <dd>If a new prodcut was successfully developed. If this is happend, you are rewarded with {{Constants.reward}} points.</dd>
+        {% if player.treatment < 3  %}
+        <dt>New patent</dt>
+        <dd>If the reasearch lead to a new patent being filed.</dd>
+        {% if player.treatment == 1 %}
+        <dt>Quality of research team</dt>
+        <dd>If the research team that was working on the product was a good or a bad team.</dd>
+        {% endif %}
+        {% endif %}
+        </dl>
 {% endblock %}
 
 {% block scripts %}

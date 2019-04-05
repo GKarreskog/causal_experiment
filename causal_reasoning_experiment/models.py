@@ -17,8 +17,9 @@ class Constants(BaseConstants):
     name_in_url = 'causal_reasoning_experiment'
     players_per_group = None
     num_rounds = 100
-    num_hire = 20
-    dollars_per_point = 0.002
+    reward = 150
+    # num_hire = 20
+    dollars_per_point = 0.001
 
 
 class Subsession(BaseSubsession):
@@ -45,21 +46,23 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     investment = models.CurrencyField(
         min=0, max=100,
-        label="How much do you want to invest in marketing?"
+        label="How much do you want to invest in reasearch and development?"
     )
     reach = models.FloatField(initial=0)
     skill = models.FloatField(initial=0)
     wage = models.IntegerField(initial=0)
     treatment = models.IntegerField()
     β = models.FloatField(initial=0.5)
+    patent = models.StringField()
+    success = models.StringField()
 
-    hire_cost = models.IntegerField()
-    hire_reach = models.IntegerField()
-    hire_decision = models.BooleanField(label="Do you want to buy this add?", choices=[[True, "Yes"], [False, "No"]], widget=widgets.RadioSelect)
+    # hire_cost = models.IntegerField()
+    # hire_reach = models.IntegerField()
+    # hire_decision = models.BooleanField(label="Do you want to buy this add?", choices=[[True, "Yes"], [False, "No"]], widget=widgets.RadioSelect)
 
-    skill_σ = models.IntegerField(initial=13)
-    reach_σ = models.IntegerField(initial=0.1)
-    wage_σ = models.IntegerField(initial=0.1)
+    # skill_σ = models.IntegerField(initial=13)
+    # reach_σ = models.IntegerField(initial=0.1)
+    # wage_σ = models.IntegerField(initial=0.1)
     # investment_order = models.IntegerField()
     # policy_order = models.IntegerField()
 
@@ -75,27 +78,29 @@ class Player(BasePlayer):
     # def policy_calc_result(self):
     #     self.policy_β = 0.6
     #     self.policy_y = 1 if np.random.rand() < self.policy_a*self.policy_β else 0
-    def hire_calc_result(self):
-        if self.hire_decision:
-            self.skill = round(np.random.randn()*self.skill_σ,2)
-            self.reach = round(np.random.rand()*self.reach_σ + self.hire_reach + self.skill)
-            self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
-            self.payoff = self.wage -  self.hire_cost
-        else:
-            self.payoff = 0
+    # def hire_calc_result(self):
+    #     if self.hire_decision:
+    #         self.skill = round(np.random.randn()*self.skill_σ,2)
+    #         self.reach = round(np.random.rand()*self.reach_σ + self.hire_reach + self.skill)
+    #         self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
+    #         self.payoff = self.wage -  self.hire_cost
+    #     else:
+    #         self.payoff = 0
 
     def calc_result(self):
-        a = np.sqrt(float(self.investment))*11/self.β
-        self.skill = round(np.random.randn()*self.skill_σ, 2)
-        self.reach = round(np.random.randn()*self.reach_σ + a + self.skill/self.β)
-        self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
-        self.payoff = self.wage -  self.investment
-        # p_θ1 = 0.5
-        # θ_0 = 0.5
-        # θ_1 = 1.
-        # β_0 = 0.3
-        # β_1 = 0.8
-        # self.skill = θ_1 if np.random.rand() < p_θ1 else θ_0
-        # self.reach = β_1 if np.random.rand() < self.skill*a else β_0
-        # self.wage = 120 if np.random.rand() < self.skill*self.reach else 20
+        a = np.sqrt(float(self.investment))/10
+        # self.skill = round(np.random.randn()*self.skill_σ, 2)
+        # self.reach = round(np.random.randn()*self.reach_σ + a + self.skill/self.β)
+        # self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
         # self.payoff = self.wage -  self.investment
+        p_θ1 = 0.5
+        θ_0 = 0.2
+        θ_1 = 1.
+        β_0 = 0.1
+        β_1 = 1.
+        self.skill = θ_1 if np.random.rand() < p_θ1 else θ_0
+        self.reach = β_1 if np.random.rand() < self.skill*a else β_0
+        self.wage = Constants.reward if np.random.rand() < self.skill*self.reach else 0
+        self.payoff = self.wage -  self.investment
+        self.patent = "Yes" if self.reach == β_1 else "No"
+        self.success = "Yes" if self.wage == Constants.reward else "No"

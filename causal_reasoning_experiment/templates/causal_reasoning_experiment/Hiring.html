@@ -25,16 +25,16 @@
     <p><strong>Round:</strong> {{player.round_number }}   <strong>Total payoff:</strong> {{tot_payoff}} </p>
 {% if player.round_number > first_round %}
 <table class="table">
-    <tr> 
+    <tr>
         <th>Round</th>
-        <th>Hire Decision</th> 
-        <th>Hire Cost</th> 
+        <th>Hire Decision</th>
+        <th>Hire Cost</th>
         <th>Reach</th>
         <th>Increased sales</th>
         <th>Profit</th>
     </tr>
     {% for p in prev_players%}
-    <tr> 
+    <tr>
         <td>{{p.round_number}}</td>
         <td>{{ p.hire_decision }}</td>
         <td>{{ p.hire_cost }}</td>
@@ -43,7 +43,7 @@
         <td>{{ p.payoff}}</td>
     </tr>
     {% endfor %}
-</table> 
+</table>
 {% endif %}
 {% endblock %}
 
