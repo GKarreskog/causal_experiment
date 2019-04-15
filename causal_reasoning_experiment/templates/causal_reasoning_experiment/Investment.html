@@ -19,15 +19,15 @@
 <p>You are paid for each additional product that is sold minus the cost of advertising. Your job is to find the amount of advertising that maximizes your payoff on average. You will have to learn from experience to figure how much you should spend on advertising..</p>
 <p>After each decision you will see both your decision and the outcome of that decision for the 10 previous rounds. You will make {{ Constants.num_rounds}} decisions. The amount spent on advertising must be between 0 and 100 points. Once the experiment is over you will be paid {{Constants.dollars_per_point}} $ per point. </p> -->
 
-<p>In this experiment, you take on the role of a CEO of a hypothetical company that wants to develop a product. If you manage to get a new product, you will receive {{ Constants.reward}} points.
+<p>In this experiment, you take on the role of a CEO of a hypothetical company that aims to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ Constants.reward}} points.
 
-    <p>You have to decide how much you want to invest in reasearch and development for this potential new product. However, the positive effect of aditional investments in reasearch and development decreases the more you invest, i.e. the difference between investing 10 and 20 points is greater then the difference between investing 80 and 90 points.  </p>
+    <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
 
-    <p>You will make {{ Constants.num_rounds}} decisions in total, and you can use the outcome of the previous decisions to help you figure out what the optimal level of investment is. The proces is not deterministic, the same level of investment will often lead to different outcomes. And the outcome of each decision does not depend on how much you invested in previous periods.
+    <p>You will make {{ Constants.num_rounds}} decisions in total, and you can use the outcome of the previous decisions to help you figure out the optimal level of investment. Note that developing a new product always includes chance: the same level of investment will often lead to different outcomes. Lastly, after each round the researchers try to develop a completely different product. Thus, whether a new product is developed does not depend on how much you invested in previous periods.</p>
 
-<p>  Once the experiment is over you will be paid {{Constants.dollars_per_point}} $ per point. </p>
-
-
+<p>  Once the experiment is over you will be paid $ {{Constants.dollars_per_point}} per point. </p>
+                                                                     
+                                                          
 
 {% formfield player.investment %}
 
@@ -46,7 +46,7 @@
            <th>Investment</th>
            <th>New patent</th>
            <th>Quality of research team</th>
-           <th>Succesful prodcut</th>
+           <th>Successful product</th>
            <!-- <th>Profit</th> -->
        </tr>
        {% for p in prev_players%}
@@ -104,12 +104,12 @@
 <p><strong>Description of the data</strong></p>
     <dl>
         <dt>Investment</dt>
-        <dd>The amount you invested in marketing. The amount you invest is decuted from your total points </dd>
-        <dt>Succesful prodcut</dt>
-        <dd>If a new prodcut was successfully developed. If this is happend, you are rewarded with {{Constants.reward}} points.</dd>
+        <dd>The amount you invested in research and development. The amount you invest is deducted from your total points. </dd>
+        <dt>Successful product</dt>
+        <dd>Indicates if a new product was developed successfully. For each developed product you are rewarded with {{Constants.reward}} points.</dd>
         {% if player.treatment < 3  %}
         <dt>New patent</dt>
-        <dd>If the reasearch lead to a new patent being filed.</dd>
+        <dd>Indicates if the research resulted in a new patent being filed.</dd>
         {% if player.treatment == 1 %}
         <dt>Quality of research team</dt>
         <dd>If the research team that was working on the product was a good or a bad team.</dd>
