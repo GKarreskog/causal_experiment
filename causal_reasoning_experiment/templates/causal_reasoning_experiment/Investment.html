@@ -15,20 +15,30 @@
 
 
 {% block content %}
-<div class="instructions">
-<p>In this experiment, you take on the role of a CEO of a hypothetical company that aims to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ reward_to_show }} points. You can invest a maximum of 100 points.
 
-    <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
-
-    <p>You will make {{ Constants.num_rounds}} decisions in total, and you can use the outcome of the previous decisions to help you figure out the optimal level of investment. Note that developing a new product always includes chance: the same level of investment will often lead to different outcomes. Lastly, after each round the researchers try to develop a completely different product. Thus, whether a new product is developed does not depend on how much you invested in previous periods.</p>
-
-<p>  Once the experiment is over your bonus payment will be 1$ per {{ points_per_dollar }} points. </p>
-</div>
 
 
 {% formfield player.investment %}
 
     {% next_button %}
+
+        <div class="button-center" style="display: flex;
+          align-items: center;
+          justify-content: center;">
+          <!-- <a href=>Hide instructions</a> -->
+            <button type="intructions-toggle" id="toggle">Hide/show intructions</button>
+        </div>
+    <div id="instructions">
+    <p>In this experiment, you take on the role of a CEO of a hypothetical company that aims to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ reward_to_show }} points. You can invest a maximum of 100 points.
+
+        <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
+
+        <p>You will make {{ Constants.num_rounds}} decisions in total, and you can use the outcome of the previous decisions to help you figure out the optimal level of investment. Note that developing a new product always includes chance: the same level of investment will often lead to different outcomes. Lastly, after each round the researchers try to develop a completely different product. Thus, whether a new product is developed does not depend on how much you invested in previous periods.</p>
+
+    <p>  Once the experiment is over your bonus payment will be 1$ per {{ points_per_dollar }} points. </p>
+    </div>
+
+
 
     <!-- <strong> Treatment: </strong> {{ player.treatment }} -->
     {% if player.round_number > 1%}
@@ -117,12 +127,19 @@
 
 {% block scripts %}
 <script type="text/javascript">
-    $(function() {
-        $("#id_investment").focus();
-        $("#id_investment").select();
-        $('#myInput').mouseup(function (e) {
-    e.preventDefault();
+
+$(document).ready(function(){
+  $("#toggle").click(function(){
+    $("#instructions").toggle("slow");
+  });
+  $(function() {
+      $("#id_investment").focus();
+      $("#id_investment").select();
+      $('#myInput').mouseup(function (e) {
+  e.preventDefault();
 });
-    });
+    $("#instructions").hide();
+  });
+});
 </script>
 {% endblock %}

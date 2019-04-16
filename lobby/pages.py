@@ -24,11 +24,7 @@ class Instructions(MyPage):
 
     def before_next_page(self):
         super().before_next_page()
-        print(self.player.q1, self.player.q2, self.player.q3, self.player.q4, self.player.q5)
-        if self.player.q2 == 30:
-            print("apa")
         if (self.player.q1 == 150) and (self.player.q2 == 30) and (self.player.q3 == 100) and (self.player.q4 == "No") and (self.player.q5 == 2.5):
-            print("Hej!")
             self.player.participant.vars['done'] = True
         else:
             self.player.participant.vars['done'] = False

@@ -7,8 +7,11 @@ import numpy as np
 class Investment(Page):
     form_model = 'player'
     form_fields = ['investment']
-    # def is_displayed(self):
-    #     return self.round_number <= Constants.num_rounds - Constants.num_hire
+    def is_displayed(self):
+        if self.player.participant.vars['failed'] == True:
+            return False
+        else:
+            return True
     def before_next_page(self):
         self.player.calc_result()
 
@@ -69,11 +72,15 @@ class Investment(Page):
 
 class Results(Page):
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds
+        if self.player.participant.vars['failed'] == True:
+            return False
+        else:
+            return self.round_number == Constants.num_rounds
+
 
     def vars_for_template(self):
         cumulative_payoff = sum([p.payoff for p in self.player.in_all_rounds()])
-        return {"money_payoff":round(float(cumulative_payoff)*Constants.dollars_per_point,2), "tot_payoff":cumulative_payoff}
+        return {"money_payoff":round(float(cumulative_payoff)*self.session.config['real_world_currency_per_point'],2), "tot_payoff":cumulative_payoff}
 
 page_sequence = [
     Investment, Results
