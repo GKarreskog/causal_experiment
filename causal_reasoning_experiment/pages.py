@@ -19,15 +19,20 @@ class Investment(Page):
                 prev_players = prev_players[-10:]
             prev_players = reversed(prev_players)
             cumulative_payoff = sum([p.payoff for p in self.player.in_previous_rounds()])
+            points_per_dollar = int(1/self.session.config['real_world_currency_per_point'])
             return {
             "prev_player":self.player.in_round(self.round_number - 1),
             "prev_players":prev_players,
-            "tot_payoff":cumulative_payoff
+            "tot_payoff":cumulative_payoff,
+            "points_per_dollar": points_per_dollar,
+            "reward_to_show": self.session.config["reward_to_show"]
             # "new_patent": "Yes" if player.reach == Constants.reward else "No"
             # "num_first_exp":Constants.num_rounds - Constants.num_hire
             }
-        # else:
-            # return {"num_first_exp":Constants.num_rounds - Constants.num_hire}
+        else:
+            points_per_dollar = int(1/self.session.config['real_world_currency_per_point'])
+            return {"points_per_dollar": points_per_dollar,
+            "reward_to_show": self.session.config["reward_to_show"]}
 #
 # class Hiring(Page):
 #     form_model = 'player'

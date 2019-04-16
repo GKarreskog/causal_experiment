@@ -15,19 +15,16 @@
 
 
 {% block content %}
-<!-- <p>In this experiment, you take on the role of a marketing manager of a hypothetical company that sells a product. You must decide how much to spend on advertising for the next month. On average, the more you spend on advertising, the more your product will sell. However, the positive effect of advertising on sales decreases the more you spend (because it becomes harder to reach additional customers (maybe we should include this to make it more reasonable)). Additionally, there may be random fluctuations: for example, sometimes advertisements are more or less effective or sometimes people like your product more or less. The outcome of each investment is independent from your previous decisions. </p>
-<p>You are paid for each additional product that is sold minus the cost of advertising. Your job is to find the amount of advertising that maximizes your payoff on average. You will have to learn from experience to figure how much you should spend on advertising..</p>
-<p>After each decision you will see both your decision and the outcome of that decision for the 10 previous rounds. You will make {{ Constants.num_rounds}} decisions. The amount spent on advertising must be between 0 and 100 points. Once the experiment is over you will be paid {{Constants.dollars_per_point}} $ per point. </p> -->
-
-<p>In this experiment, you take on the role of a CEO of a hypothetical company that aims to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ Constants.reward}} points.
+<div class="instructions">
+<p>In this experiment, you take on the role of a CEO of a hypothetical company that aims to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ reward_to_show }} points. You can invest a maximum of 100 points.
 
     <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
 
     <p>You will make {{ Constants.num_rounds}} decisions in total, and you can use the outcome of the previous decisions to help you figure out the optimal level of investment. Note that developing a new product always includes chance: the same level of investment will often lead to different outcomes. Lastly, after each round the researchers try to develop a completely different product. Thus, whether a new product is developed does not depend on how much you invested in previous periods.</p>
 
-<p>  Once the experiment is over you will be paid $ {{Constants.dollars_per_point}} per point. </p>
-                                                                     
-                                                          
+<p>  Once the experiment is over your bonus payment will be 1$ per {{ points_per_dollar }} points. </p>
+</div>
+
 
 {% formfield player.investment %}
 

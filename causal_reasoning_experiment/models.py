@@ -16,10 +16,9 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'causal_reasoning_experiment'
     players_per_group = None
-    num_rounds = 100
-    reward = 150
-    # num_hire = 20
-    dollars_per_point = 0.001
+    num_rounds = 100 # Remember to change in SETTINGS_CONFIG as well
+    reward = 200 # Remember to change in SETTINGS_CONFIG as well
+
 
 
 class Subsession(BaseSubsession):
@@ -88,15 +87,15 @@ class Player(BasePlayer):
     #         self.payoff = 0
 
     def calc_result(self):
-        a = np.sqrt(float(self.investment))/10
+        a = np.sqrt(float(self.investment)/100)
         # self.skill = round(np.random.randn()*self.skill_σ, 2)
         # self.reach = round(np.random.randn()*self.reach_σ + a + self.skill/self.β)
         # self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
         # self.payoff = self.wage -  self.investment
         p_θ1 = 0.5
-        θ_0 = 0.2
+        θ_0 = 0.
         θ_1 = 1.
-        β_0 = 0.1
+        β_0 = 0.5
         β_1 = 1.
         self.skill = θ_1 if np.random.rand() < p_θ1 else θ_0
         self.reach = β_1 if np.random.rand() < self.skill*a else β_0

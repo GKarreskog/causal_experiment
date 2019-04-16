@@ -28,7 +28,9 @@ SESSION_CONFIGS = [
         'name': 'causal_reasoning_experiment',
         'display_name': "Causal Reasoning",
         'num_demo_participants': 3,
-        'app_sequence': ['causal_reasoning_experiment'],
+        'num_rounds_to_show':100,
+        'reward_to_show': 200,
+        'app_sequence': ['lobby', 'causal_reasoning_experiment'],
     }
     # ,
     # {
@@ -89,7 +91,7 @@ AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY')
 DEBUG = (environ.get('OTREE_PRODUCTION') in {None, '', '0'})
 
 DEMO_PAGE_INTRO_HTML = """
-Here are various games implemented with 
+Here are various games implemented with
 oTree. These games are open
 source, and you can modify them as you wish.
 """
