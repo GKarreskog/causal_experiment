@@ -3,7 +3,18 @@
 
 
 {% block app_styles %}
+<style>
+p.btn {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
 
+p.no-btn {
+    color:blue;
+    cursor:pointer;
+}
+</style>
 {% endblock%}
 
 {% block title %}
@@ -22,12 +33,6 @@
 
     {% next_button %}
 
-        <div class="button-center" style="display: flex;
-          align-items: center;
-          justify-content: center;">
-          <!-- <a href=>Hide instructions</a> -->
-            <button type="intructions-toggle" id="toggle">Hide/show intructions</button>
-        </div>
     <div id="instructions">
     <p>In this experiment, you take on the role of a CEO of a hypothetical company that aims to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ reward_to_show }} points. You can invest a maximum of 100 points.
 
@@ -37,6 +42,13 @@
 
     <p>  Once the experiment is over your bonus payment will be 1$ per {{ points_per_dollar }} points. </p>
     </div>
+    <div class="button-center" style="display: flex;
+      align-items: center;
+      justify-content: center;">
+      <!-- <a href=>Hide instructions</a> -->
+        <p type="intructions-toggle" class="no-btn" id="toggle">Hide/show intructions</p>
+    </div>
+
 
 
 
@@ -127,17 +139,16 @@
 
 {% block scripts %}
 <script type="text/javascript">
-
+    $(function() {
+        $("#id_investment").focus();
+        $("#id_investment").select();
+        $('#myInput').mouseup(function (e) {
+    e.preventDefault();
+  });
 $(document).ready(function(){
   $("#toggle").click(function(){
     $("#instructions").toggle("slow");
   });
-  $(function() {
-      $("#id_investment").focus();
-      $("#id_investment").select();
-      $('#myInput').mouseup(function (e) {
-  e.preventDefault();
-});
     $("#instructions").hide();
   });
 });
