@@ -10,7 +10,7 @@
 
     <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
 
-    <p>You will make {{ Constants.num_rounds}} decisions in total, and you can use the outcome of the previous decisions to help you figure out the optimal level of investment. Note that developing a new product always includes chance: the same level of investment will often lead to different outcomes. Lastly, after each round the researchers try to develop a completely different product. Thus, whether a new product is developed does not depend on how much you invested in previous periods.</p>
+    <p>You will make {{ num_rounds }} decisions in total, and you can use the outcome of the previous decisions to help you figure out the optimal level of investment. Note that developing a new product always includes chance: the same level of investment will often lead to different outcomes. Lastly, after each round the researchers try to develop a completely different product. Thus, whether a new product is developed does not depend on how much you invested in previous periods.</p>
 
 <p>  Once the experiment is over your bonus payment will be 1$ per {{ points_per_dollar }} points. </p>
 </div>
@@ -20,14 +20,14 @@
 <p> Try {{player.round_number}}/{{Constants.num_rounds}} of the quiz.</p>
 
 {% if player.round_number > 1 %}
-<p style="text-color: red"> At least one of your answers was incorrect, read the instructions and try again. </p>
+<p style="color: red; font-weight:bold;"> At least one of your answers was incorrect, read the instructions and try again. </p>
 {% endif %}
 
 
 {% formfield player.q1 label="If you invest fifty points and a new product is successfully developed, how much to your total points increase?" %}
 {% formfield player.q2 label="If you invest thirty points, and no new prodcut is developed, how much does your total points decrease?" %}
 {% formfield player.q3 label="How many investment decisions will you make in total?" %}
-{% formfield player.q4 label="Will a decision you make in one period directly effect feature periods in any way?" %}
+{% formfield player.q4 label="Will a decision you make in one period directly affect feature periods in any way?" %}
 {% formfield player.q5 label="If you earn a total of 2500 points, what will be your bonus payment in $?" %}
 
 

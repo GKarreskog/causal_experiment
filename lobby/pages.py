@@ -34,7 +34,8 @@ class Instructions(MyPage):
     def vars_for_template(self):
             points_per_dollar = int(1/self.session.config['real_world_currency_per_point'])
             return {"points_per_dollar": points_per_dollar,
-                    "reward_to_show":self.session.config['reward_to_show']}
+                    "reward_to_show":self.session.config['reward_to_show'],
+                    "num_rounds": self.session.config['num_rounds_to_show']}
 
 class FailPage(Page):
     def is_displayed(self):

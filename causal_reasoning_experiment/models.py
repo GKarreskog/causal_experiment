@@ -45,7 +45,8 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     investment = models.CurrencyField(
         min=0, max=100,
-        label="How much do you want to invest in research and development?"
+        label="How many points do you want to invest in research and development?",
+        widget = widgets.Slider(attrs={'step': 1})
     )
     reach = models.FloatField(initial=0)
     skill = models.FloatField(initial=0)
