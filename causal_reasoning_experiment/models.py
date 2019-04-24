@@ -18,6 +18,11 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 100 # Remember to change in SETTINGS_CONFIG as well
     reward = 200 # Remember to change in SETTINGS_CONFIG as well
+    δ = 0.7
+    θ_0 = 0.
+    θ_1 = 1.
+    β_0 = 0.2
+    β_1 = 1.
 
 
 
@@ -45,8 +50,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     investment = models.CurrencyField(
         min=0, max=100,
-        label="How many points do you want to invest in research and development?",
-        widget = widgets.Slider(attrs={'step': 1})
+        label="How many points do you want to invest in research and development?"
     )
     reach = models.FloatField(initial=0)
     skill = models.FloatField(initial=0)
@@ -93,12 +97,12 @@ class Player(BasePlayer):
         # self.reach = round(np.random.randn()*self.reach_σ + a + self.skill/self.β)
         # self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
         # self.payoff = self.wage -  self.investment
-        p_θ1 = 0.5
-        θ_0 = 0.
-        θ_1 = 1.
-        β_0 = 0.5
-        β_1 = 1.
-        self.skill = θ_1 if np.random.rand() < p_θ1 else θ_0
+        δ = Constants.δ
+        θ_0 = Constants.θ_0
+        θ_1 = Constants.θ_1
+        β_0 = Constants.β_0
+        β_1 = Constants.β_1
+        self.skill = θ_1 if np.random.rand() < δ else θ_0
         self.reach = β_1 if np.random.rand() < self.skill*a else β_0
         self.wage = Constants.reward if np.random.rand() < self.skill*self.reach else 0
         self.payoff = self.wage -  self.investment

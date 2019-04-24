@@ -15,6 +15,9 @@ p.no-btn {
     cursor:pointer;
 }
 
+#instructions {
+    display: none;
+}
 </style>
 {% endblock%}
 
@@ -34,7 +37,7 @@ p.no-btn {
 
 {% if player.treatment < 3 %}
 
-<p> If you invest <span id="inv_num">50</span>, the probability of a succesfull patent is <strong> <span id="inv_prob">71</span> %</strong>
+<p id="prob-text">  </p>
 
 {% endif %}
     {% next_button %}
@@ -156,9 +159,16 @@ $(document).ready(function(){
     $("#instructions").toggle("slow");
   });
     $("#instructions").hide();
-  $("#id_investment").change(function() {
-      $('#inv_prob').text(function() {
-          return Math.round(Math.sqrt($('#id_investment').val())*10);
+  $("#id_investment").on('input', function() {
+      $('#prob-text').html(function() {
+          // return "If you invest " + $('#id_investment').val().toString()  + "the probability of a succesfull patent is <strong>" + Math.round(Math.sqrt($('#id_investment').val())*10).toString() </strong> %";
+          invest = $('#id_investment').val();
+          prob_success = Math.round(Math.sqrt(invest)*10*{{Constants.δ}}).toString();
+          res_str = "If you invest <strong>" + invest.toString()  + "</strong> points, the probability of a succesfull patent is <strong>" + prob_success + "</strong> %";
+          if (invest > 100 || invest < 0) {
+              res_str = "Invalid investment"
+          }
+          return res_str;
       })
   })
   });
