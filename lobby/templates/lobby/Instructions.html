@@ -5,14 +5,40 @@
 {% endblock %}
 
 {% block content %}
-<div class="instructions">
+<div id="instructions">
 <p>In this experiment, you take on the role of a CEO of a hypothetical company that aims to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ reward_to_show }} points. You can invest a maximum of 100 points.
 
+    {% if player.treatment == 1 %}
+    <p>Your task is to decide how much you want to invest in research and development. Investing costs points. The probability for creating a successful product depends on whether your research team was able to get a new patent out of the research activity and on the success of your competitor. Getting a patent and having an unsuccessful competitor makes developing a successful product more likely. Investing more always makes getting a new patent more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to get a new patent when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. The success of your competitor cannot be affected by your investment decisions.</p>
+    {% endif %}
+
+    {% if player.treatment == 2 %}
+    <p>Your task is to decide how much you want to invest in research and development. Investing costs points. The probability for creating a successful product depends on whether the research team was able to get a new patent out of the research activity. Getting a patent makes developing a successful product more likely. Investing more always makes getting a new patent more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to get a new patent when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
+    {% endif %}
+
+    {% if player.treatment == 3 %}
     <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
+    {% endif %}
+
+
+
+<!--     <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
+
+    {% if player.treatment == 1 %}
+    <p>The probability for creating a successful product depends on whether the research team was able to get a new patent out of the research activity and success of your competitor. Getting a patent and having an unsuccessful competitor makes developing a successful product more likely. By investing in research and development you can increase the probability of getting a new patent. The success of your competitor cannot be affected by your investment decisions.</p>
+    {% endif %}
+
+    {% if player.treatment == 2 %}
+    <p>The probability for creating a successful product depends on whether the research team was able to get a new patent out of the research activity. Getting a patent makes developing a successful product more likely. By investing in research and development you can increase the probability of getting a new patent. </p>
+    {% endif %}
+
+{% if player.treatment == 3 %}
+    <p></p>
+    {% endif %} in case we want to add instructions to the low information group. -->
 
     <p>You will make {{ num_rounds }} decisions in total, and you can use the outcome of the previous decisions to help you figure out the optimal level of investment. Note that developing a new product always includes chance: the same level of investment will often lead to different outcomes. Lastly, after each round the researchers try to develop a completely different product. Thus, whether a new product is developed does not depend on how much you invested in previous periods.</p>
 
-<p>  Once the experiment is over your bonus payment will be 1$ per {{ points_per_dollar }} points. </p>
+<p>  Once the experiment is over your bonus payment will be $1 per {{ points_per_dollar }} points. If you end up with a negative score, your bonus payment will be $0. </p>
 </div>
 
 <p> Before you can start the experiment you must complete a short quiz. You need to get all the questions correct before you can continue. You have {{Constants.num_rounds}} tries in total, if you fail them all you will be disqualified from the experiment.</p>
@@ -24,10 +50,10 @@
 {% endif %}
 
 
-{% formfield player.q1 label="If you invest fifty points and a new product is successfully developed, how much to your total points increase?" %}
-{% formfield player.q2 label="If you invest thirty points, and no new prodcut is developed, how much does your total points decrease?" %}
+{% formfield player.q1 label="If you invest fifty points and a new product is successfully developed, by how many points do your total points increase?" %}
+{% formfield player.q2 label="If you invest thirty points, and no new prodcut is developed, by how many points do your total points decrease?" %}
 {% formfield player.q3 label="How many investment decisions will you make in total?" %}
-{% formfield player.q4 label="Will a decision you make in one period directly affect feature periods in any way?" %}
+{% formfield player.q4 label="Will a decision you make in one period directly affect future periods in any way?" %}
 {% formfield player.q5 label="If you earn a total of 2500 points, what will be your bonus payment in $?" %}
 
 

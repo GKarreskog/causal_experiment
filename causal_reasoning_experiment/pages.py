@@ -28,14 +28,16 @@ class Investment(Page):
             "prev_players":prev_players,
             "tot_payoff":cumulative_payoff,
             "points_per_dollar": points_per_dollar,
-            "reward_to_show": self.session.config["reward_to_show"]
+            "reward_to_show": self.session.config["reward_to_show"],
+            "num_rounds": self.session.config['num_rounds_to_show']
             # "new_patent": "Yes" if player.reach == Constants.reward else "No"
             # "num_first_exp":Constants.num_rounds - Constants.num_hire
             }
         else:
             points_per_dollar = int(1/self.session.config['real_world_currency_per_point'])
             return {"points_per_dollar": points_per_dollar,
-            "reward_to_show": self.session.config["reward_to_show"]}
+            "reward_to_show": self.session.config["reward_to_show"],
+            "num_rounds": self.session.config['num_rounds_to_show']}
 #
 # class Hiring(Page):
 #     form_model = 'player'
@@ -69,6 +71,18 @@ class Investment(Page):
 #             return {"tot_payoff":cumulative_payoff,"first_round": first_round}
 
 
+class OptQuestion(Page):
+    form_model = 'player'
+    form_fields = ['opt_question']
+    def is_displayed(self):
+        if self.player.participant.vars['failed'] == True:
+            return False
+        else:
+            return self.round_number == Constants.num_rounds
+
+
+
+
 
 class Results(Page):
     def is_displayed(self):
@@ -83,5 +97,5 @@ class Results(Page):
         return {"money_payoff":round(float(cumulative_payoff)*self.session.config['real_world_currency_per_point'],2), "tot_payoff":cumulative_payoff}
 
 page_sequence = [
-    Investment, Results
+    Investment, OptQuestion, Results
 ]

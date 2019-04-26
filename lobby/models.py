@@ -21,6 +21,10 @@ class Subsession(BaseSubsession):
         if self.round_number == 1:
             for p in self.get_players():
                 p.participant.vars["failed"] = False
+                p.participant.vars["treatment"] = (p.id_in_group % 3) + 1
+                    # p.participant.vars["investment"], p.participant.vars["policy"] = np.random.permutate([1,2])
+        for p in self.get_players():
+            p.treatment = p.participant.vars["treatment"]
 
 
 class Group(BaseGroup):
@@ -28,6 +32,7 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    treatment = models.IntegerField()
     q1 = models.IntegerField(choices=[0,50,150,200], widget=widgets.RadioSelect)
     q2 = models.IntegerField(choices=[0, 10, 15, 30, 60], widget=widgets.RadioSelect)
     q3 = models.IntegerField(choices=[10,30,50,100,], widget=widgets.RadioSelect)

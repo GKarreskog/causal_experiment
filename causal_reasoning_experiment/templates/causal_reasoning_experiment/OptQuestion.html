@@ -1,0 +1,12 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+        Results
+{% endblock %}
+
+{% block content %}
+<p>Now that you have made {{ Constants.num_rounds }} decisions, what do you think is the optimal level of investment?</p>
+{% formfield player.opt_question %}
+    {% next_button %}
+{% endblock %}

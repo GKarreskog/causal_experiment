@@ -16,7 +16,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'causal_reasoning_experiment'
     players_per_group = None
-    num_rounds = 100 # Remember to change in SETTINGS_CONFIG as well
+    num_rounds = 5 # Remember to change in SETTINGS_CONFIG as well
     reward = 200 # Remember to change in SETTINGS_CONFIG as well
     δ = 0.7
     θ_0 = 0.
@@ -28,9 +28,9 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
-        if self.round_number == 1:
-            for p in self.get_players():
-                p.participant.vars["treatment"] = (p.id_in_group % 3) + 1
+        # if self.round_number == 1:
+        #     for p in self.get_players():
+        #         p.participant.vars["treatment"] = (p.id_in_group % 3) + 1
                 # p.participant.vars["investment"], p.participant.vars["policy"] = np.random.permutate([1,2])
         for p in self.get_players():
             p.treatment = p.participant.vars["treatment"]
@@ -52,6 +52,8 @@ class Player(BasePlayer):
         min=0, max=100,
         label="How many points do you want to invest in research and development?"
     )
+    opt_question = models.CurrencyField(min=0, max=100,
+    label="What do you think is the optimal level of investment?")
     reach = models.FloatField(initial=0)
     skill = models.FloatField(initial=0)
     wage = models.IntegerField(initial=0)
@@ -59,6 +61,7 @@ class Player(BasePlayer):
     β = models.FloatField(initial=0.5)
     patent = models.StringField()
     success = models.StringField()
+    competition = models.StringField()
 
     # hire_cost = models.IntegerField()
     # hire_reach = models.IntegerField()
@@ -108,3 +111,4 @@ class Player(BasePlayer):
         self.payoff = self.wage -  self.investment
         self.patent = "Yes" if self.reach == β_1 else "No"
         self.success = "Yes" if self.wage == Constants.reward else "No"
+        self.competition = "No" if self.skill == θ_1 else "Yes"
