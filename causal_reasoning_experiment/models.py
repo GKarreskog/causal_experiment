@@ -16,7 +16,7 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'causal_reasoning_experiment'
     players_per_group = None
-    num_rounds = 5 # Remember to change in SETTINGS_CONFIG as well
+    num_rounds = 100 # Remember to change in SETTINGS_CONFIG as well
     reward = 200 # Remember to change in SETTINGS_CONFIG as well
     δ = 0.7
     θ_0 = 0.

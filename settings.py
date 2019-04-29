@@ -6,19 +6,32 @@ from os import environ
 # e.g. self.session.config['participation_fee']
 mturk_hit_settings = {
     'keywords': ['bonus', 'study'],
-    'title': 'Title for your experiment',
-    'description': 'Description for your experiment',
+    'title': 'Experiment on decison making',
+    'description': 'You will participate in an experiment on decision making, the biggest part of the payment will be the bonus payment. Expected to take less than 10 minutes to complete.',
     'frame_height': 500,
     'preview_template': 'global/MTurkPreview.html',
     'minutes_allotted_per_assignment': 60,
     'expiration_hours': 7*24, # 7 days
     #'grant_qualification_id': 'YOUR_QUALIFICATION_ID_HERE',# to prevent retakes
-    'qualification_requirements': []
+    'qualification_requirements': [
+    {
+        'QualificationTypeId': "000000000000000000L0",
+        'Comparator': "GreaterThan",
+        'IntegerValues': [99]
+    },
+    {
+        'QualificationTypeId': "00000000000000000071",
+        'Comparator': "EqualTo",
+        'LocaleValues': [{
+            'Country': "US",
+        }]
+    }
+    ]
 }
 
 SESSION_CONFIG_DEFAULTS = {
-    'real_world_currency_per_point': 0.001,
-    'participation_fee': 0.01,
+    'real_world_currency_per_point': 0.0005,
+    'participation_fee': 0.25,
     'mturk_hit_settings': mturk_hit_settings,
     'doc': "",
 }
