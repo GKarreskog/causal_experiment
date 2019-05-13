@@ -6,9 +6,9 @@ from os import environ
 # e.g. self.session.config['participation_fee']
 mturk_hit_settings = {
     'keywords': ['bonus', 'study'],
-    'title': 'Experiment on decison making',
-    'description': 'You will participate in an experiment on decision making, the biggest part of the payment will be the bonus payment. Expected to take less than 10 minutes to complete.',
-    'frame_height': 500,
+    'title': 'Experiment on decison making and learning from experience',
+    'description': 'You will participate in an experiment on decision making, where the biggest part of the payment will be the bonus payment. The experiment will help us understand how people learn from experience.',
+    'frame_height': 800,
     'preview_template': 'global/MTurkPreview.html',
     'minutes_allotted_per_assignment': 60,
     'expiration_hours': 7*24, # 7 days
@@ -17,7 +17,7 @@ mturk_hit_settings = {
     {
         'QualificationTypeId': "000000000000000000L0",
         'Comparator': "GreaterThan",
-        'IntegerValues': [99]
+        'IntegerValues': [95]
     },
     {
         'QualificationTypeId': "00000000000000000071",
