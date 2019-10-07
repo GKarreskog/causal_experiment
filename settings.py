@@ -43,7 +43,8 @@ SESSION_CONFIGS = [
         'num_demo_participants': 3,
         'num_rounds_to_show':100,
         'reward_to_show': 200,
-        'app_sequence': ['lobby', 'causal_reasoning_experiment'],
+        # 'app_sequence': ['lobby', 'causal_reasoning_experiment'],
+        'app_sequence': ['lobby_causal'],
     }
     # ,
     # {

@@ -1,0 +1,13 @@
+{
+  "nodes":[
+		{"name":"A","id":0, "x":300, "y":150,"text":"0%", "col":"#fafafa"},
+		{"name":"B","id":1, "x":200, "y":300,"text":"", "col":"#e55"},
+		{"name":"C","id":2, "x":600, "y":300,"text":"", "col":"#5e5"},
+		{"name":"D","id":3, "x":600, "y":180,"text":"R", "col":"#5e5"}
+	],
+	"links":[
+		{"source":0,"target":1},
+		{"source":1,"target":2},
+		{"source":1,"target":3}
+	]
+}

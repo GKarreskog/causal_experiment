@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Practice round {{ subsession.round_number }} of {{ Constants.num_rounds }}
+{% endblock %}
+
+{% block content %}
+
+    <div id="target"></div>
+    <input type="hidden" value="-1" name="choice" id="id_choice"/>
+
+    {{ form.choice.errors }}
+
+    
+    <script>
+        var game = JSON.parse("{{ player.game }}");
+        $(document).ready(function () {
+          runGame('#target', game);
+        });
+    </script>
+
+
+{% endblock %}

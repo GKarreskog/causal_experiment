@@ -14,7 +14,7 @@
 {% if player.treatment == 3 %}
     <p>It is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points.       </p>
     {% endif %}
--->. 
+-->.
 
     {% if player.treatment == 1 %}
     <p>The probability for creating a successful product depends on whether your research team was able to get a new patent out of the research activity and on the success of your competitor.</p>
@@ -26,11 +26,14 @@
 
  <!--{% if player.treatment == 3 %}
     <p></p>
-    {% endif %}-->   
+    {% endif %}-->
 
     <p>You will make {{ num_rounds }} decisions in total. Whether a new product is developed does not depend on how much you invested in previous periods.</p>
 
 <p>  Once the experiment is over your bonus payment will be $1 per {{ points_per_dollar }} points. If you end up with a negative score, your bonus payment will be $0. </p>
+</div>
+
+<div id="canvas">
 </div>
 
 <p> Before you can start the experiment you must pass a short quiz. You have {{Constants.num_rounds}} tries in total, if you fail them all you will be disqualified from the experiment.</p>
@@ -41,7 +44,7 @@
 <p style="color: red; font-weight:bold;"> At least one of your answers was incorrect, read the instructions and try again. </p>
 {% endif %}
 
- <!--maybe we can also decrease the number of quiz questions. Is it essential for them to understand the answers for 1 and 2? they will learn them in like 5 rounds max.--> 
+ <!--maybe we can also decrease the number of quiz questions. Is it essential for them to understand the answers for 1 and 2? they will learn them in like 5 rounds max.-->
 
 {% formfield player.q1 label="If you invest fifty points and a new product is successfully developed, by how many points do your total points increase?" %}
 {% formfield player.q2 label="If you invest thirty points, and no new prodcut is developed, by how many points do your total points decrease?" %}
@@ -54,4 +57,246 @@
         {% next_button %}
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+
+<!-- <script type="text/javascript"> -->
+<script>
+console.log("{% static 'global/data.json'%}");
+
+var width = 800,
+    height = 400
+
+var svg = d3.select("#canvas").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+// var c10 = d3.scale.category10();
+// var svg = d3.select("#canvas")
+//   .append("svg")
+//   .attr("width", 800)
+//   .attr("height", 500);
+
+  // var margin = {top: 10, right: 30, bottom: 30, left: 30},
+    // width = 800 - margin.left - margin.right,
+    // height = 400 - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  // var svg = d3.select("#canvas")
+//  .append("svg")
+  //  .attr("width", width + margin.left + margin.right)
+    //.attr("height", height + margin.top + margin.bottom)
+  // .append("g")
+  //   .attr("transform",
+  //         "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':30,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#000')
+        .style('stroke','none');
+
+d3.json("{% static 'global/data.json'%}", function(data) {
+  console.log(data)
+   var links = svg.selectAll("link")
+     .data(data.links)
+     .enter()
+     .append("line")
+     .attr("class", "link")
+     .attr("x1", function(l) {
+       var sourceNode = data.nodes.filter(function(d, i) {
+         return i == l.source
+       })[0];
+       d3.select(this).attr("y1", sourceNode.y);
+       return sourceNode.x
+     })
+     .attr("x2", function(l) {
+       var targetNode = data.nodes.filter(function(d, i) {
+         return i == l.target
+       })[0];
+       d3.select(this).attr("y2", targetNode.y);
+       return targetNode.x
+     })
+     .attr("fill", "#000")
+     .attr("stroke", "white")
+     .attr('marker-end', 'url(#arrowhead)');
+
+   var nodes = svg.selectAll("node")
+    .data(data.nodes)
+    .enter()
+    .append("circle")
+    .attr("class", "node")
+    .attr("cx", function(d) {
+      return d.x
+    })
+    .attr("cy", function(d) {
+      return d.y
+    })
+    .attr("r", 25)
+    // .attr("fill", function(d) {return d.col})
+    // .attrs({"stroke-width": "1",
+            // "stroke": "black"})
+    .text(function(d) {return d.text})
+    .attr("text-anchor", "middle")
+
+    nodes.append("text")
+        .attr("dx", 0)
+        .attr("dy", 0)
+        .attrs({"stroke-width": "1",
+                "stroke": "black"})
+        .text(function(d) { return d.text });
+
+
+    // .attr("fill", function(d, i) {
+    //   return c10(i);
+    // })
+  });
+
+
+// set the dimensions and margins of the graph
+// var margin = {top: 10, right: 30, bottom: 30, left: 40},
+//   width = 400 - margin.left - margin.right,
+//   height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+// var svg = d3.select("#canvas")
+// .append("svg")
+//   .attr("width", width + margin.left + margin.right)
+//   .attr("height", height + margin.top + margin.bottom)
+// .append("g")
+//   .attr("transform",
+//         "translate(" + margin.left + "," + margin.top + ")");
+//
+// svg.append('defs').append('marker')
+//         .attrs({'id':'arrowhead',
+//             'viewBox':'-0 -5 10 10',
+//             'refX':13,
+//             'refY':0,
+//             'orient':'auto',
+//             'markerWidth':13,
+//             'markerHeight':13,
+//             'xoverflow':'visible'})
+//         .append('svg:path')
+//         .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+//         .attr('fill', '#999')
+//         .style('stroke','none');
+
+
+// var force = d3.layout.force()
+//     .gravity(.05)
+//     .distance(200)
+//     .charge(-400)
+//     .size([width, height]);
+
+// d3.json("{% static 'global/graphFile.json'%}", function(data) {
+    // Initialize the links
+ // var link = svg
+   // .selectAll("line")
+   // .data(data.links)
+   // .enter()
+   // .append("line")
+   //   .style("stroke", "#aaa")
+   //   .attr('marker-end', 'url(#arrowhead)')
+
+ // Initialize the nodes
+ // var node = svg
+ //   .selectAll("circle")
+ //   .data(data.nodes)
+ //   .enter()
+ //   .append("circle")
+ //     .attr("r", 5)
+ //     .style("fill", "#69b3a2")
+
+ // Let's list the force we wanna apply on the network
+ // var simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
+ //     .force("link", d3.forceLink()                               // This force provides links between nodes
+ //           .id(function(d) { return d.id; })                     // This provide  the id of a node
+ //           .links(data.links)                                    // and this the list of links
+ //           .distance(100)
+ //     )
+ //     .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+ //     .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
+ //     .on("tick", ticked);
+
+ // This function is run at each iteration of the force algorithm, updating the nodes position.
+//  function ticked() {
+//    link
+//        .attr("x1", function(d) { return d.source.x; })
+//        .attr("y1", function(d) { return d.source.y; })
+//        .attr("x2", function(d) { return d.target.x; })
+//        .attr("y2", function(d) { return d.target.y; });
+//
+//    node
+//         .attr("cx", function (d) { return d.x; })
+//         .attr("cy", function(d) { return d.y; });
+//  }
+//
+// });
+  // force
+  //     .nodes(json.nodes)
+  //     .links(json.links)
+  //     .start();
+  // var link = svg.selectAll(".link")
+  //     .data(json.links)
+  //   .enter().append("line")
+  //     .attr("class", "link")
+  // .attr('marker-end', 'url(#arrowhead)')
+  //   .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+  //
+  // var node = svg.selectAll(".node")
+  //     .data(json.nodes)
+  //   .enter().append("g")
+  //     .attr("class", "node")
+  //     .call(force.drag);
+  //
+  // node.append("circle")
+  //     .attr("r","5");
+  //
+  // node.append("text")
+  //     .attr("dx", 12)
+  //     .attr("dy", ".35em")
+  //     .text(function(d) { return d.name });
+ // // Let's list the force we wanna apply on the network
+  // var simulation = d3.forceSimulation(json.nodes)                 // Force algorithm is applied to json.nodes
+  //     .force("link", d3.forceLink()                               // This force provides links between nodes
+  //           .id(function(d) { return d.id; })                     // This provide  the id of a node
+  //           .links(json.links)                                    // and this the list of links
+  //     )
+  //     .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
+  //     .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
+  //     .on("end", ticked);
+
+  // function ticked() {
+  //   link
+  //       .attr("x1", function(d) { return d.source.x; })
+  //       .attr("y1", function(d) { return d.source.y; })
+  //       .attr("x2", function(d) { return d.target.x; })
+  //       .attr("y2", function(d) { return d.target.y; });
+  //
+  //   node
+  //        .attr("cx", function (d) { return d.x+6; })
+  //        .attr("cy", function(d) { return d.y-6; });
+  // }
+
+  // force.on("tick", function() {
+  //   link.attr("x1", function(d) { return d.source.x; })
+  //       .attr("y1", function(d) { return d.source.y; })
+  //       .attr("x2", function(d) { return d.target.x; })
+  //       .attr("y2", function(d) { return d.target.y; });
+  //
+  //   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  // });
+// });
+
+</script>
 {% endblock %}
