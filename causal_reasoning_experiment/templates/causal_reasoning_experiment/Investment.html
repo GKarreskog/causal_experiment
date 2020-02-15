@@ -32,6 +32,18 @@ p.no-btn {
 {% block content %}
 
 
+<div id="instructions">
+    <p> You can invest points in order to increase the chance of the left circle turning on. The percentage in the left circle represents the probability of the circle turning on. The arrows represent causal relationships between circles. An arrow between two circles means that the probability of the circle at the tip of the arrow turning on depends on whether the circle at the base of the arrow is turned on or off. You make 100 decisions in total. If the circle in the right corner is turned on, you receive a reward of 200 points.
+    </div>
+
+    <div class="button-center" style="display: flex;
+    align-items: center;
+    justify-content: center;">
+    <!-- <a href=>Hide instructions</a> -->
+    <p type="intructions-toggle" class="no-btn" id="toggle">Hide/show intructions</p>
+</div>
+
+<p><strong>Round:</strong> {{player.round_number }}   <strong>Total points:</strong> {{tot_payoff}} </p>
 
 {% formfield player.investment %}
 
@@ -40,140 +52,42 @@ p.no-btn {
 <p id="prob-text">  </p>
 
 {% endif %} -->
-    {% next_button %}
 
-    <div id="instructions">
-        <p>In this experiment, you take on the role of a CEO of a hypothetical company that aims to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ reward_to_show }} points. You can invest a maximum of 100 points.
-
-            {% if player.treatment == 1 %}
-            <p>Your task is to decide how much you want to invest in research and development. Investing costs points. The probability for creating a successful product depends on whether your research team was able to get a new patent out of the research activity and on the success of your competitor. Getting a patent and having an unsuccessful competitor makes developing a successful product more likely. Investing more always makes getting a new patent more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to get a new patent when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. The success of your competitor cannot be affected by your investment decisions.</p>
-            {% endif %}
-
-            {% if player.treatment == 2 %}
-            <p>Your task is to decide how much you want to invest in research and development. Investing costs points. The probability for creating a successful product depends on whether the research team was able to get a new patent out of the research activity. Getting a patent makes developing a successful product more likely. Investing more always makes getting a new patent more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to get a new patent when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
-            {% endif %}
-
-            {% if player.treatment == 3 %}
-            <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
-            {% endif %}
-
-
-
-        <!--     <p>Your task is to decide how much you want to invest in research and development. Investing costs points. Investing more always makes developing a new product more likely. However, the positive effect of investments in research and development decreases the more you invest, i.e. it is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points. </p>
-
-            {% if player.treatment == 1 %}
-            <p>The probability for creating a successful product depends on whether the research team was able to get a new patent out of the research activity and success of your competitor. Getting a patent and having an unsuccessful competitor makes developing a successful product more likely. By investing in research and development you can increase the probability of getting a new patent. The success of your competitor cannot be affected by your investment decisions.</p>
-            {% endif %}
-
-            {% if player.treatment == 2 %}
-            <p>The probability for creating a successful product depends on whether the research team was able to get a new patent out of the research activity. Getting a patent makes developing a successful product more likely. By investing in research and development you can increase the probability of getting a new patent. </p>
-            {% endif %}
-
-        {% if player.treatment == 3 %}
-            <p></p>
-            {% endif %} in case we want to add instructions to the low information group. -->
-
-            <p>You will make {{ num_rounds }} decisions in total, and you can use the outcome of the previous decisions to help you figure out the optimal level of investment. Note that developing a new product always includes chance: the same level of investment will often lead to different outcomes. Lastly, after each round the researchers try to develop a completely different product. Thus, whether a new product is developed does not depend on how much you invested in previous periods.</p>
-
-        <p>  Once the experiment is over your bonus payment will be $1 per {{ points_per_dollar }} points. If you end up with a negative score, your bonus payment will be $0. </p>
-    </div>
-    <div class="button-center" style="display: flex;
-      align-items: center;
-      justify-content: center;">
-      <!-- <a href=>Hide instructions</a> -->
-        <p type="intructions-toggle" class="no-btn" id="toggle">Hide/show intructions</p>
-    </div>
 
 
 
 
     <!-- <strong> Treatment: </strong> {{ player.treatment }} -->
-    {% if player.round_number > 1%}
- <p><strong>Round:</strong> {{player.round_number }}   <strong>Total payoff:</strong> {{tot_payoff}} </p>
+    <div id="root" class="canvas">
+    </div>
 
 
- {% if player.treatment == 1 %}
 
- <table class="table">
-       <tr>
-           <th>Round</th>
-           <th>Investment</th>
-           <th>New patent</th>
-           <th>Success of competitor</th>
-           <th>Successful product</th>
-           <!-- <th>Profit</th> -->
-       </tr>
-       {% for p in prev_players%}
-       <tr>
-           <td>{{p.round_number}}</td>
-           <td>{{ p.investment }}</td>
-           <td>{{ p.patent }}</td>
-           <td>{{ p.competition }}</td>
-           <td>{{ p.success}}</td>
-           <!-- <td>{{ p.payoff}}</td> -->
-       </tr>
-       {% endfor %}
-   </table>
-{% endif %}
-{% if player.treatment == 2 %}
- <table class="table">
-       <tr>
-           <th>Round</th>
-           <th>Investment</th>
-          <th>New patent</th>
-           <th>Successful product</th>
-           <!-- <th>Profit</th> -->
-       </tr>
-       {% for p in prev_players%}
-       <tr>
-           <td>{{p.round_number}}</td>
-           <td>{{ p.investment }}</td>
-           <td>{{ p.patent }}</td>
-           <td>{{ p.success}}</td>
-           <!-- <td>{{ p.payoff}}</td> -->
-       </tr>
-       {% endfor %}
-   </table>
-{% endif %}
-{% if player.treatment == 3 %}
- <table class="table">
-       <tr>
-           <th>Round</th>
-           <th>Investment</th>
-           <th>Successful product</th>
-           <!-- <th>Profit</th> -->
-       </tr>
-       {% for p in prev_players%}
-       <tr>
-           <td>{{p.round_number}}</td>
-           <td>{{ p.investment }}</td>
-           <td>{{ p.success}}</td>
-           <!-- <td>{{ p.payoff}}</td> -->
-       </tr>
-       {% endfor %}
-   </table>
-{% endif %}
-{% endif %}
+{% next_button %}
 
-<p><strong>Description of the data</strong></p>
-    <dl>
-        <dt>Investment</dt>
-        <dd>The amount you invested in research and development. The amount you invest is deducted from your total points. </dd>
-        <dt>Successful product</dt>
-        <dd>Indicates if a new product was developed successfully. For each developed product you are rewarded with {{Constants.reward}} points.</dd>
-        {% if player.treatment < 3  %}
-        <dt>New patent</dt>
-        <dd>Indicates if the research resulted in a new patent being filed.</dd>
-        {% if player.treatment == 1 %}
-        <dt>Success of competitor</dt>
-        <dd>If the competitor managed to launch a new product before your company.</dd>
-        {% endif %}
-        {% endif %}
-        </dl>
+
 {% endblock %}
 
 {% block scripts %}
 <script type="text/javascript">
+
+const exampleGraph = {
+'nodes': [
+{ 'name': '0%', 'id': 0, 'status':'none', 'x': 100, 'y': 200 },
+{ 'name': '200p', 'id': 1, 'status':'none', 'x': 400, 'y': 300 },
+{ 'name': '', 'id': 2, 'status':'none', 'x': 300, 'y': 200 },
+{ 'name': '', 'id': 3, 'status':'none', 'x': 400, 'y': 100 },
+],
+'arrows': [
+{ 'source': 0, 'target': 2 },
+{ 'source': 2, 'target': 1 },
+{ 'source': 3, 'target': 2 },
+]
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+mainDraw('root', exampleGraph)
+})
     $(function() {
         $("#id_investment").focus();
         $("#id_investment").select();
@@ -186,13 +100,13 @@ $(document).ready(function(){
   });
     $("#instructions").hide();
   $("#id_investment").on('input', function() {
-      $('#prob-text').html(function() {
+      $('#node-0').html(function() {
           // return "If you invest " + $('#id_investment').val().toString()  + "the probability of a successfull patent is <strong>" + Math.round(Math.sqrt($('#id_investment').val())*10).toString() </strong> %";
           invest = $('#id_investment').val();
           prob_success = Math.round(Math.sqrt(invest)*10*{{Constants.δ}}).toString();
-          res_str = "If you invest <strong>" + invest.toString()  + "</strong> points, the probability of a successfull patent is <strong>" + prob_success + "</strong> %";
+          res_str = `${prob_success}%`;
           if (invest > 100 || invest < 0) {
-              res_str = "Invalid investment"
+              res_str = "-"
           }
           return res_str;
       })

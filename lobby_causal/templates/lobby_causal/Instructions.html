@@ -6,36 +6,46 @@
 
 {% block content %}
 <div id="instructions">
-<p>In this experiment, your goal is to develop new products by investing in research and development. For each newly developed product, you will receive a bonus of {{ reward_to_show }} points. Investing costs points. The effect of investing is decreasing the more you invest <!-- here we could do the following to decrease the length of the instructions: a dropdown "click here for more information/example" or something like that, which gives the example, depending on treatment:
-{% if player.treatment <= 2 %}
+<p> In this  experiment you will face a number of problems that looks like the one below</p>
+<!-- {% if player.treatment <= 2 %}
     <p>It is quite more likely to get a new patent when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points.
     </p>
     {% endif %}
 {% if player.treatment == 3 %}
     <p>It is quite more likely to develop a new product when you invest 20 instead of 10 points, but only a little more likely when you invest 90 instead of 80 points.       </p>
     {% endif %}
--->.
-
+-->
+<!--
     {% if player.treatment == 1 %}
     <p>The probability for creating a successful product depends on whether your research team was able to get a new patent out of the research activity and on the success of your competitor.</p>
     {% endif %}
 
     {% if player.treatment == 2 %}
     <p>The probability for creating a successful product depends on whether the research team was able to get a new patent out of the research activity.</p>
-    {% endif %}
+    {% endif %} -->
 
  <!--{% if player.treatment == 3 %}
     <p></p>
     {% endif %}-->
 
-    <p>You will make {{ num_rounds }} decisions in total. Whether a new product is developed does not depend on how much you invested in previous periods.</p>
-
-<p>  Once the experiment is over your bonus payment will be $1 per {{ points_per_dollar }} points. If you end up with a negative score, your bonus payment will be $0. </p>
+<div class='canvas' id="root-example">
 </div>
 
+<p>Each circle can be turned on or off (turn green or red, respectively). You can affect whether one of the circles is turned on by spending activation points. The percentage in the circle represents the probability of the circle turning on based on the number of points you plan to invest. If the final circle is turned on, you receive a reward as indicated in the final circle (in this example, 200 points). If it is not turned on you will get 0 points. The circles are connected by arrows that represent causal relationships. This means, that there is a connection between whether the circle is turned on and the probability of whether the circle at the tip of the arrow is turned on. </p>
 
-<div id="root">
+<p>For each problem you will make {{ num_rounds }} decisions in total. You are not provided with all the information necessary to make the optimal investment at the outset, but since you make the same decision many times you can figure out what a good level of investment is. After each decision you will se the results presented in the following way, where green means that variable was activated and red that it was not.</p>
+
+<div class='canvas' id="root-activated-example">
 </div>
+
+<p>
+So in this example we see the invested points gave a 33% probabilty of turning on the circle. We also see that three circles ended up being turned on. The goal variable is turned on so the payoff was 200.</p>
+
+<p>Once the experiment is over your bonus payment will be $1 per {{ points_per_dollar }} points. If you end up with a negative score, your bonus payment will be $0. </p>
+</div>
+
+<hr/>
+
 <p> Before you can start the experiment you must pass a short quiz. You have {{Constants.num_rounds}} tries in total, if you fail them all you will be disqualified from the experiment.</p>
 
 <p> Try {{player.round_number}}/{{Constants.num_rounds}} of the quiz.</p>
@@ -46,45 +56,15 @@
 
  <!--maybe we can also decrease the number of quiz questions. Is it essential for them to understand the answers for 1 and 2? they will learn them in like 5 rounds max.-->
 
-{% formfield player.q1 label="If you invest fifty points and a new product is successfully developed, by how many points do your total points increase?" %}
-{% formfield player.q2 label="If you invest thirty points, and no new prodcut is developed, by how many points do your total points decrease?" %}
-{% formfield player.q3 label="How many investment decisions will you make in total?" %}
+{% formfield player.q1 label="Consider the example above. If you invest fifty points and the final circle is turned on, how much do your total points increase?" %}
+{% formfield player.q2 label="With the same example, if you invest thirty points, and the final circle is turned off, by how many points do your total points decrease?" %}
+{% formfield player.q3 label="How many investment decisions will you make for each problem?" %}
 {% formfield player.q4 label="Will a decision you make in one period directly affect future periods in any way?" %}
 {% formfield player.q5 label="If you earn a total of 5000 points, what will be your bonus payment in $?" %}
-
-
     <div class="centered">
         {% next_button %}
     </div>
 
-<style>
-  * {
-    box-sizing: border-box;
-  }
-
-  #root {
-    border: 1px solid black;
-    height: 600px;
-    width: 800px;
-    position: relative;
-  }
-
-  .node {
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    position: absolute;
-    text-align: center;
-  }
-
-  .arrow {
-    position: absolute;
-  }
-
-  .arrow-head {
-    position: absolute;
-  }
-</style>
 
 {% endblock %}
 
@@ -93,108 +73,39 @@
 <!-- <script type="text/javascript"> -->
 <script>
 
-    const exampleGraph = {
-      'nodes': [
-        { 'name': 'A', 'id': 0, 'x': 200, 'y': 150 },
-        { 'name': 'B', 'id': 1, 'x': 140, 'y': 300 },
-        { 'name': 'C', 'id': 2, 'x': 300, 'y': 300 },
-        { 'name': 'D', 'id': 3, 'x': 300, 'y': 180 },
-        { 'name': 'D', 'id': 4, 'x': 300, 'y': 350 }
-      ],
-      'arrows': [
-        { 'source': 0, 'target': 1 },
-        { 'source': 1, 'target': 2 },
-        { 'source': 1, 'target': 3 },
-        { 'source': 1, 'target': 4 }
-      ]
-    }
 
-    const mkEl = html => {
-      const template = document.createElement('template')
-      template.innerHTML = html.trim()
-      return template.content.firstChild
-    }
+  const exampleGraph = {
+    'nodes': [
+    { 'name': '0%', 'id': 0, 'status':'none', 'x': 100, 'y': 200 },
+    { 'name': '200p', 'id': 1, 'status':'none', 'x': 400, 'y': 300 },
+    { 'name': '', 'id': 2, 'status':'none', 'x': 300, 'y': 200 },
+    { 'name': '', 'id': 3, 'status':'none', 'x': 400, 'y': 100 },
+    ],
+    'arrows': [
+    { 'source': 0, 'target': 2 },
+    { 'source': 2, 'target': 1 },
+    { 'source': 3, 'target': 2 },
+    ]
+  }
+  const exampleOutcomeGraph = {
+    'nodes': [
+    { 'name': '33%', 'id': 0, 'status':'true', 'x': 100, 'y': 200 },
+    { 'name': '200p', 'id': 1, 'status':'true', 'x': 400, 'y': 300 },
+    { 'name': '', 'id': 2, 'status':'true', 'x': 300, 'y': 200 },
+    { 'name': '', 'id': 3, 'status':'false', 'x': 400, 'y': 100 },
+    ],
+    'arrows': [
+    { 'source': 0, 'target': 2 },
+    { 'source': 2, 'target': 1 },
+    { 'source': 3, 'target': 2 },
+    ]
+  }
 
-    const nodeRadius = 30
-    const lineHeight = 1
-    const arrowSize = 10
-    const arrowColor = '#000'
 
-    const drawNode = (root, node) => {
-      root.appendChild(
-        mkEl(`
-          <div
-            class="node"
-            id="node-${node.id}"
-            style="
-              left: ${node.x - nodeRadius}px;
-              top: ${node.y - nodeRadius}px;
-              height: ${2 * nodeRadius}px;
-              width: ${2 * nodeRadius}px;
-              line-height: ${2 * nodeRadius}px; /* center vertically */
-            "
-          >
-          ${node.id}
-          </div>
-        `)
-      )
-    }
-
-    const drawArrow = (root, sourceNode, targetNode) => {
-      const length = Math.sqrt(
-        Math.pow(targetNode.x - sourceNode.x, 2) +
-        Math.pow(targetNode.y - sourceNode.y, 2)
-      )
-      let angleDeg = Math.asin((targetNode.y - sourceNode.y) / length) * 180 / Math.PI
-      if ((targetNode.x - sourceNode.x) < 0) {
-        angleDeg = 180 - angleDeg
-      }
-      root.appendChild(
-        mkEl(`
-          <div
-            class="arrow"
-            style="
-              left: ${(targetNode.x + sourceNode.x) / 2 - length / 2}px;
-              top: ${(targetNode.y + sourceNode.y) / 2 - lineHeight / 2}px;
-              height: ${lineHeight}px;
-              width: ${length}px;
-              transform: rotate(${angleDeg}deg);
-              background: ${arrowColor};
-            "
-          >
-            <div
-              class="arrow-head"
-              style="
-                border-top: ${arrowSize}px solid transparent;
-                border-bottom: ${arrowSize}px solid transparent;
-                border-left: ${arrowSize}px solid ${arrowColor};
-                left: ${length - nodeRadius - arrowSize}px;
-                top: -${arrowSize - lineHeight / 2}px;
-              "
-            />
-          </div>
-        `)
-      )
-    }
-
-    const drawGraph = (graph, root) => {
-      for (const arrow of graph.arrows) {
-        const sourceNode = graph.nodes.find(node => node.id === arrow.source)
-        const targetNode = graph.nodes.find(node => node.id === arrow.target)
-        drawArrow(root, sourceNode, targetNode)
-      }
-      for (const node of graph.nodes) {
-        drawNode(root, node)
-      }
-    }
-
-    const main = (id) => {
-      const root = document.getElementById(id)
-      drawGraph(exampleGraph, root)
-    }
 
     window.addEventListener('DOMContentLoaded', () => {
-      main('root')
+      mainDraw('root-example', exampleGraph)
+      mainDraw('root-activated-example', exampleOutcomeGraph)
     })
 </script>
 {% endblock %}

@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+
+.canvas {
+  /* border: 1px solid black; */
+  height: 400px;
+  width: 600px;
+  position: relative;
+}
+
+.node {
+  background-color: white;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+}
+
+
+.node-0 {
+  background-color: white;
+}
+
+.node-1 {
+  background-color: white;
+}
+
+.true {
+  background-color: #2ECC40;
+}
+
+.false {
+  background-color: #FF4136;
+}
+
+
+.arrow {
+  position: absolute;
+}
+
+.arrow-head {
+  position: absolute;
+}

@@ -1,0 +1,117 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+
+{% block app_styles %}
+<style>
+p.btn {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+
+p.no-btn {
+    color:blue;
+    cursor:pointer;
+}
+
+#instructions {
+    display: none;
+}
+
+.true {
+  background-color: white;
+}
+
+.false {
+  background-color: white;
+}
+
+</style>
+{% endblock%}
+
+{% block title %}
+    Result from previous round
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+<p><strong>Round:</strong> {{player.round_number }}   <strong>Total points:</strong> {{tot_payoff}} </p>
+<div id="root" class="canvas">
+</div>
+
+
+
+
+
+{% next_button %}
+
+
+{% endblock %}
+
+{% block scripts %}
+<!--TODO: Add functions to calculate the turn on probability, return variables, and add these variable names to the exampleGraph below. Not sure whether this has to happen here or whether it has to happen in python somewhere else. Ill look into it.  -->
+
+<script type="text/javascript">
+var status = 'false';
+var true_color = "#2ECC40";
+var false_color = "#FF4136";
+var timeout_ms = 1000;
+var actiavte_order = new Array(0, 3, 2, 1);
+
+
+
+const exampleGraph = {
+'nodes': [
+{ 'name': '0%', 'id': 0, 'status':status, 'x': 100, 'y': 200 },
+{ 'name': '200p', 'id': 1, 'status':'true', 'x': 400, 'y': 300 },
+{ 'name': '', 'id': 2, 'status':'true', 'x': 300, 'y': 200 },
+{ 'name': '', 'id': 3, 'status':'true', 'x': 400, 'y': 100 },
+],
+'arrows': [
+{ 'source': 0, 'target': 2 },
+{ 'source': 2, 'target': 1 },
+{ 'source': 3, 'target': 2 },
+]
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+mainDraw('root', exampleGraph)
+})
+
+
+function sequential_coloring(i){
+    var id_num = actiavte_order[i];
+    setTimeout(function(){
+    if($('#node-'+id_num.toString()).hasClass("true")){
+        console.log('#node-'+id_num.toString())
+        $('#node-'+id_num.toString()).css("background-color", true_color);
+    } else {
+        console.log('#node-'+id_num.toString())
+        $('#node-'+id_num.toString()).css("background-color", false_color);
+    }
+},timeout_ms*(i+1));
+}
+
+$(document).ready(function(){
+    $('#node-0').html(function() {
+        // return "If you invest " + $('#id_investment').val().toString()  + "the probability of a successfull patent is <strong>" + Math.round(Math.sqrt($('#id_investment').val())*10).toString() </strong> %";
+        invest = $('#id_investment').val();
+        prob_success = Math.round(Math.sqrt({{investment}})*10*{{Constants.δ}}).toString();
+        res_str = `${prob_success}%`;
+        if (invest > 100 || invest < 0) {
+            res_str = "-"
+        }
+        return res_str;
+    });
+    for(i=0; i < 4; i++){
+        sequential_coloring(i)
+    }
+})
+
+</script>
+{% endblock %}

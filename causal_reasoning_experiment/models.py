@@ -28,9 +28,9 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
-        # if self.round_number == 1:
-        #     for p in self.get_players():
-        #         p.participant.vars["treatment"] = (p.id_in_group % 3) + 1
+        if self.round_number == 1:
+            for p in self.get_players():
+                p.participant.vars["treatment"] = (p.id_in_group % 3) + 1
                 # p.participant.vars["investment"], p.participant.vars["policy"] = np.random.permutate([1,2])
         for p in self.get_players():
             p.treatment = p.participant.vars["treatment"]

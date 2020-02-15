@@ -3,33 +3,7 @@
 
 {% block global_styles  %}
     <!-- <link rel="stylesheet" type="text/css" href="{% static 'global/theme.css' %}" /> -->
-    <!-- <link rel="stylesheet" type="text/css" href="{% static 'global/style.css' %}" /> -->
-    <style>
-
-    #canvas {
-       max-width: 800px;
-       /* height: 400px; */
-       margin: auto;
-     }
-
-
-.link {
-  stroke: #aaa;
-}
-
-
-.node text {
-stroke:#333;
-cursos:pointer;
-}
-
-.node circle{
-stroke:#000;
-stroke-width:1px;
-/* fill:#aaa; */
-}
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'global/style.css' %}" />
 
 {% endblock %}
 
@@ -39,6 +13,7 @@ stroke-width:1px;
 
 <!-- <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script> -->
 <script src="https://d3js.org/d3.v4.js"></script>
+<script src="{% static 'global/script.js' %}"></script>
 <script src="http://d3js.org/d3-selection-multi.v1.js"></script>
 
 <!-- <script src="sigma.min.js"></script> -->
