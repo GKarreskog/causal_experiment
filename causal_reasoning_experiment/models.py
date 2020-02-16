@@ -31,6 +31,19 @@ class Subsession(BaseSubsession):
         if self.round_number == 1:
             for p in self.get_players():
                 p.participant.vars["treatment"] = (p.id_in_group % 3) + 1
+                p.participant.vars["graph"] = {
+                'nodes': [
+                { 'name': '0%', 'id': 0, 'status':True, 'x': 100, 'y': 200 },
+                { 'name': '200p', 'id': 1, 'status':True, 'x': 400, 'y': 300 },
+                { 'name': '', 'id': 2, 'status':False, 'x': 300, 'y': 200 },
+                { 'name': '', 'id': 3, 'status':True, 'x': 400, 'y': 101 },
+                ],
+                'arrows': [
+                { 'source': 0, 'target': 2 },
+                { 'source': 2, 'target': 1 },
+                { 'source': 3, 'target': 2 },
+                ]
+                }
                 # p.participant.vars["investment"], p.participant.vars["policy"] = np.random.permutate([1,2])
         for p in self.get_players():
             p.treatment = p.participant.vars["treatment"]
@@ -56,7 +69,7 @@ class Player(BasePlayer):
     label="What do you think is the optimal level of investment?")
     reach = models.FloatField(initial=0)
     skill = models.FloatField(initial=0)
-    wage = models.IntegerField(initial=0)
+    n1 = models.IntegerField(initial=0)
     treatment = models.IntegerField()
     β = models.FloatField(initial=0.5)
     patent = models.StringField()
@@ -69,7 +82,7 @@ class Player(BasePlayer):
 
     # skill_σ = models.IntegerField(initial=13)
     # reach_σ = models.IntegerField(initial=0.1)
-    # wage_σ = models.IntegerField(initial=0.1)
+    # n1_σ = models.IntegerField(initial=0.1)
     # investment_order = models.IntegerField()
     # policy_order = models.IntegerField()
 
@@ -89,8 +102,8 @@ class Player(BasePlayer):
     #     if self.hire_decision:
     #         self.skill = round(np.random.randn()*self.skill_σ,2)
     #         self.reach = round(np.random.rand()*self.reach_σ + self.hire_reach + self.skill)
-    #         self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
-    #         self.payoff = self.wage -  self.hire_cost
+    #         self.n1 = round(np.random.randn()*self.n1_σ + self.β*self.reach + self.skill)
+    #         self.payoff = self.n1 -  self.hire_cost
     #     else:
     #         self.payoff = 0
 
@@ -98,8 +111,8 @@ class Player(BasePlayer):
         a = np.sqrt(float(self.investment)/100)
         # self.skill = round(np.random.randn()*self.skill_σ, 2)
         # self.reach = round(np.random.randn()*self.reach_σ + a + self.skill/self.β)
-        # self.wage = round(np.random.randn()*self.wage_σ + self.β*self.reach + self.skill)
-        # self.payoff = self.wage -  self.investment
+        # self.n1 = round(np.random.randn()*self.n1_σ + self.β*self.reach + self.skill)
+        # self.payoff = self.n1 -  self.investment
         δ = Constants.δ
         θ_0 = Constants.θ_0
         θ_1 = Constants.θ_1
@@ -107,8 +120,10 @@ class Player(BasePlayer):
         β_1 = Constants.β_1
         self.skill = θ_1 if np.random.rand() < δ else θ_0
         self.reach = β_1 if np.random.rand() < self.skill*a else β_0
-        self.wage = Constants.reward if np.random.rand() < self.skill*self.reach else 0
-        self.payoff = self.wage -  self.investment
+        self.n1 = Constants.reward if np.random.rand() < self.skill*self.reach else 0
+        self.payoff = self.n1 -  self.investment
         self.patent = "Yes" if self.reach == β_1 else "No"
-        self.success = "Yes" if self.wage == Constants.reward else "No"
+        self.success = "Yes" if self.n1 == Constants.reward else "No"
         self.competition = "No" if self.skill == θ_1 else "Yes"
+        self.participant.vars["graph"]["nodes"][1]["status"] = self.success
+        self.participant.vars["graph"]["nodes"][3]["status"] = self.competition == "No"

@@ -29,7 +29,8 @@ class Investment(Page):
             "tot_payoff":self.player.participant.payoff,
             "points_per_dollar": points_per_dollar,
             "reward_to_show": self.session.config["reward_to_show"],
-            "num_rounds": self.session.config['num_rounds_to_show']
+            "num_rounds": self.session.config['num_rounds_to_show'],
+            "graph": self.player.participant.vars["graph"]
             # "new_patent": "Yes" if player.reach == Constants.reward else "No"
             # "num_first_exp":Constants.num_rounds - Constants.num_hire
             }
@@ -38,7 +39,9 @@ class Investment(Page):
             return {"points_per_dollar": points_per_dollar,
             "tot_payoff":self.player.participant.payoff,
             "reward_to_show": self.session.config["reward_to_show"],
-            "num_rounds": self.session.config['num_rounds_to_show']}
+            "num_rounds": self.session.config['num_rounds_to_show'],
+            "graph": self.player.participant.vars["graph"]
+            }
 
 class RoundResults(Page):
     def is_displayed(self):
@@ -51,7 +54,8 @@ class RoundResults(Page):
     def vars_for_template(self):
         return {
         "tot_payoff":self.player.participant.payoff,
-        "investment": int(self.player.investment)
+        "investment": int(self.player.investment),
+        "graph": self.player.participant.vars["graph"]
         }
 #
 # class Hiring(Page):
